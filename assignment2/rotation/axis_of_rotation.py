@@ -40,9 +40,27 @@ def axis_of_rotation(transformation: Matrix) -> Vector:
 
     :param transformation: The 3x3 transformation matrix for which to find the axis of rotation.
     """
-    # TODO: This should return the axis of rotation
-
-    return Vector([0, 0, 1])
+    rotation = np.array(rotation_component(transformation))
+    theta = np.arccos((np.trace(rotation) - 1) / 2)
+    axis = np.array([])
+    if np.isclose(theta, np.pi) or np.isclose(theta, 0):
+        # MEMO: in this case, any vector perpendicular to the plane of rotation is valid.
+        print("special case!!!!!!!")
+        axis = np.cross(rotation[0, :], rotation[1, :])
+    else:
+        axis = (
+            np.array(
+                [
+                    rotation[2, 1] - rotation[1, 2],
+                    rotation[0, 2] - rotation[2, 0],
+                    rotation[1, 0] - rotation[0, 1],
+                ]
+            )
+            / 2
+            * np.sin(theta)
+        )
+    axis = axis / np.linalg.norm(axis)
+    return Vector(axis)
 
 
 # !!! This function will be used for automatic grading, don't edit the signature !!!
@@ -57,4 +75,6 @@ def angle_of_rotation(transformation: Matrix) -> float:
     :return: The angle of rotation in radians.
     """
     # TODO: This should return the angle of rotation
-    return math.pi
+    rotation = np.array(rotation_component(transformation))
+
+    return np.arccos((np.trace(rotation) - 1) / 2)
