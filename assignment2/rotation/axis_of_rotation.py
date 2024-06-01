@@ -21,9 +21,13 @@ def rotation_component(transformation: Matrix) -> Matrix:
     transformation = numpy.array(transformation)
 
     # HINT: The translation is contained entirely in the 4th column, so it will be dropped when you make the matrix 3x3
-
-    # TODO: This should extract the 3x3 rotation matrix from the 4x4 input
-    return Matrix(transformation[:3, :3])
+    rotation_scale = transformation[:3, :3]
+    U, _, Vt = np.linalg.svd(rotation_scale)
+    rotation = np.dot(U, Vt)
+    det_rotation = np.linalg.det(rotation)
+    if det_rotation < 0:
+        rotation[:, -1] *= -1
+    return Matrix(rotation)
 
 
 # !!! This function will be used for automatic grading, don't edit the signature !!!
@@ -37,6 +41,7 @@ def axis_of_rotation(transformation: Matrix) -> Vector:
     :param transformation: The 3x3 transformation matrix for which to find the axis of rotation.
     """
     # TODO: This should return the axis of rotation
+
     return Vector([0, 0, 1])
 
 

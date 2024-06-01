@@ -4,12 +4,35 @@ version = "0.1.0"
 description = ""
 authors = ["HideBa <baba.papa1120.ba@gmail.com>"]
 readme = "README.md"
-packages = [{include = "assignment2_distribution"}]
+packages = [{ include = "assignment2_distribution" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-
+numpy = "^1.26.4"
+scipy = "^1.13.1"
+pip = "^24.0"
+fake-bpy-module = "^20240601"
+black = "^24.4.2"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 79
+
+
+[tool.flake8]
+max-line-length = 79
+ignore = ["E203", "E501", "W503"]
