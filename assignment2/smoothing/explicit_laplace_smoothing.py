@@ -56,11 +56,11 @@ def build_combinatorial_laplacian(mesh: bmesh.types.BMesh) -> sparray:
     Computes the normalized combinatorial Laplacian the given mesh.
 
     First, the adjacency matrix is computed efficiently using the edge_matrix function.
-    Then the normalized Laplacian is calculated using the sparse operations: L = I-A/D
+    Then the normalized Laplacian is calculated using the sparse operations: L = I - D^(-1)A
     where I is the identity and D the degree matrix.
     The resulting mesh should have the following properties:
         - L_ii = 1
-        - L_ij = 1 / deg_i (if an edge exists between i and j)
+        - L_ij = - 1 / deg_i (if an edge exists between i and j)
         - L_ij = 0 (if such an edge does not exist)
     Where deg_i is the degree of node i (its number of edges).
 
@@ -83,7 +83,7 @@ def explicit_laplace_smooth(
 
     Updates are computed using the laplacian matrix and then weighted by Tau before subtracting from the vertices.
 
-        x = x + tau * L @ x
+        x = x - tau * L @ x
 
     :param vertices: Vertices to apply offsets to as an Nx3 numpy array.
     :param L: The NxN sparse laplacian matrix

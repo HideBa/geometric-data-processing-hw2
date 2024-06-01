@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "assignment2-distribution"
+version = "0.1.0"
+description = ""
+authors = ["HideBa <baba.papa1120.ba@gmail.com>"]
+readme = "README.md"
+packages = [{include = "assignment2_distribution"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

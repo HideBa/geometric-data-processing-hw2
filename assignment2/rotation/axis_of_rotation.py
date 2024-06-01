@@ -2,6 +2,7 @@ import math
 from typing import Optional
 
 import numpy
+import numpy as np
 from mathutils import Matrix, Vector
 
 
