@@ -13,19 +13,21 @@ def numpy_verts(mesh: bmesh.types.BMesh) -> np.ndarray:
     :param mesh: The BMesh to extract the vertices of.
     :return: A numpy array of shape [n, 3], where array[i, :] is the x, y, z coordinate of vertex i.
     """
-    data = bpy.data.meshes.new('tmp')
+    data = bpy.data.meshes.new("tmp")
     mesh.to_mesh(data)
     # Explained here:
     # https://blog.michelanders.nl/2016/02/copying-vertices-to-numpy-arrays-in_4.html
     vertices = np.zeros(len(mesh.verts) * 3, dtype=np.float64)
-    data.vertices.foreach_get('co', vertices)
+    data.vertices.foreach_get("co", vertices)
     return vertices.reshape([len(mesh.verts), 3])
 
 
 def set_verts(mesh: bmesh.types.BMesh, verts: np.ndarray) -> bmesh.types.BMesh:
-    data = bpy.data.meshes.new('tmp1')  # temp Blender Mesh to perform fast setting
+    data = bpy.data.meshes.new(
+        "tmp1"
+    )  # temp Blender Mesh to perform fast setting
     mesh.to_mesh(data)
-    data.vertices.foreach_set('co', verts.ravel())
+    data.vertices.foreach_set("co", verts.ravel())
     mesh.clear()
     mesh.from_mesh(data)
     return mesh
@@ -74,9 +76,9 @@ def build_combinatorial_laplacian(mesh: bmesh.types.BMesh) -> sparray:
 
 # !!! This function will be used for automatic grading, don't edit the signature !!!
 def explicit_laplace_smooth(
-        vertices: np.ndarray,
-        L: coo_array,
-        tau: float,
+    vertices: np.ndarray,
+    L: coo_array,
+    tau: float,
 ) -> np.ndarray:
     """
     Performs smoothing of a list of vertices given a combinatorial Laplace matrix and a weight Tau.
@@ -97,15 +99,13 @@ def explicit_laplace_smooth(
 
 # !!! This function will be used for automatic grading, don't edit the signature !!!
 def iterative_explicit_laplace_smooth(
-        mesh: bmesh.types.BMesh,
-        tau: float,
-        iterations: int
+    mesh: bmesh.types.BMesh, tau: float, iterations: int
 ) -> bmesh.types.BMesh:
     """
     Performs smoothing of a given mesh using the iterative explicit Laplace smoothing.
 
     First, we define the coordinate vectors and the combinatorial Laplace matrix as numpy arrays.
-    Then, we apply the smoothing operation as many times as iterations. 
+    Then, we apply the smoothing operation as many times as iterations.
     We weight the updating vector in each iteration by tau.
 
     :param mesh: Mesh to smooth.

@@ -10,7 +10,7 @@ update:
 
 .PHONY: lint
 lint:
-	poetry run flake8 $(PACKAGE_DIR)
+	poetry run flake8 $(PACKAGE_DIR)/**/*.py
 
 .PHONY: type
 type:

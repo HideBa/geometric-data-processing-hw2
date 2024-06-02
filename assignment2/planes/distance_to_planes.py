@@ -32,9 +32,9 @@ class SquaredDistanceToPlanesSolver(object):
         #       but it won't get full points.
         self.planes = planes
 
+        # Precompute matrix
         A = np.zeros((3, 3))
         b = np.zeros(3)
-
         for q, n in self.planes:
             n = np.array(n) / np.linalg.norm(n)  # Normalize the normal vector
             q = np.array(q)

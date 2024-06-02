@@ -1,8 +1,8 @@
 import bpy
 
-from .smoothing import *
-from .rotation import *
 from .planes import *
+from .rotation import *
+from .smoothing import *
 
 bl_info = {
     "name": "GDP Practical Assignment 2",
@@ -12,13 +12,12 @@ bl_info = {
     "version": (0, 0, 1),
     "location": "View3D",
     "warning": "",
-    "category": "Mesh"
+    "category": "Mesh",
 }
 
 classes = [
     AxisOfRotation,
     AxisOfRotationGizmo,
-
     PlanesPropertyGroup,
     PlanesList,
     CreatePlaneOperator,
@@ -28,7 +27,6 @@ classes = [
     MoveToOptimalPositionOperator,
     PlanesGizmo,
     VectorsToPlanesGizmo,
-
     ExplicitLaplaceSmoothing,
 ]
 

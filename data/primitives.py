@@ -1,5 +1,5 @@
-import bpy
 import bmesh
+import bpy
 
 
 def cube(**kwargs) -> bmesh.types.BMesh:
@@ -35,9 +35,4 @@ TORUS = torus()
 UV_SPHERE = uv_sphere()
 TETRAHEDRON = tetrahedron()
 
-ALL_PRIMITIVES = [
-    CUBE,
-    TORUS,
-    UV_SPHERE,
-    TETRAHEDRON
-]
+ALL_PRIMITIVES = [CUBE, TORUS, UV_SPHERE, TETRAHEDRON]
