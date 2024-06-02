@@ -1,6 +1,6 @@
 import numpy
 import numpy as np
-from scipy.sparse import coo_array, eye_array, sparray
+from scipy.sparse import coo_array, eye_array, sparray, coo_matrix
 
 import bpy
 import bmesh
@@ -49,7 +49,18 @@ def adjacency_matrix(mesh: bmesh.types.BMesh) -> coo_array:
     #       Building a sparse matrix from a set of I, J, V triplets is also faster than adding elements sequentially.
     # TODO: Create a sparse adjacency matrix using one of the types from scipy.sparse
     num_verts = len(mesh.verts)
-    return coo_array(([], ([], [])), shape=(num_verts, num_verts))
+    rows: list[int] = []
+    cols: list[int] = []
+    for edge in mesh.edges:
+        v1, v2 = edge.verts
+        rows.append(v1.index)
+        cols.append(v2.index)
+        rows.append(v2.index)
+        cols.append(v1.index)
+    np_rows: np.ndarray = np.array(rows)
+    np_cols: np.ndarray = np.array(cols)
+    data: np.ndarray = np.ones_like(np_rows)
+    return coo_array((data, (np_rows, np_cols)), shape=(num_verts, num_verts))
 
 
 # !!! This function will be used for automatic grading, don't edit the signature !!!
@@ -69,9 +80,21 @@ def build_combinatorial_laplacian(mesh: bmesh.types.BMesh) -> sparray:
     :param mesh: Mesh to compute the normalized combinatorial Laplacian matrix of.
     :return: A sparse array representing the mesh Laplacian matrix.
     """
+
     # TODO: Build the combinatorial laplacian matrix
     num_verts = len(mesh.verts)
-    return eye_array(num_verts)
+    # verts = numpy_verts(mesh)
+    # L: np.ndarray = np.ndarray((num_verts, num_verts), dtype=np.float32)
+    A = adjacency_matrix(mesh)
+    vert_degrees = []
+    for vert in mesh.verts:
+        degree = len(vert.link_edges)
+        vert_degrees.append(degree)
+    D = np.diag(vert_degrees)
+    I = np.identity(num_verts)
+    L = I - np.linalg.inv(D) @ A
+    print("L: ", L)
+    return L
 
 
 # !!! This function will be used for automatic grading, don't edit the signature !!!
@@ -93,7 +116,13 @@ def explicit_laplace_smooth(
     :return: The new positions of the vertices as an Nx3 numpy array.
     """
     # TODO: Update the vertices using the combinatorial laplacian matrix L
-
+    vertices_x = vertices[:, 0]
+    vertices_y = vertices[:, 1]
+    vertices_z = vertices[:, 2]
+    vertices_x = vertices_x - tau * L @ vertices_x
+    vertices_y = vertices_y - tau * L @ vertices_y
+    vertices_z = vertices_z - tau * L @ vertices_z
+    vertices = np.column_stack((vertices_x, vertices_y, vertices_z))
     return vertices
 
 
