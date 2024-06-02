@@ -81,10 +81,7 @@ def build_combinatorial_laplacian(mesh: bmesh.types.BMesh) -> sparray:
     :return: A sparse array representing the mesh Laplacian matrix.
     """
 
-    # TODO: Build the combinatorial laplacian matrix
     num_verts = len(mesh.verts)
-    # verts = numpy_verts(mesh)
-    # L: np.ndarray = np.ndarray((num_verts, num_verts), dtype=np.float32)
     A = adjacency_matrix(mesh)
     vert_degrees = []
     for vert in mesh.verts:
@@ -93,7 +90,6 @@ def build_combinatorial_laplacian(mesh: bmesh.types.BMesh) -> sparray:
     D = np.diag(vert_degrees)
     I = np.identity(num_verts)
     L = I - np.linalg.inv(D) @ A
-    print("L: ", L)
     return L
 
 
@@ -115,7 +111,6 @@ def explicit_laplace_smooth(
     :param tau: Update weight, tau=0 leaves the vertices unchanged, and tau=1 applies the full update.
     :return: The new positions of the vertices as an Nx3 numpy array.
     """
-    # TODO: Update the vertices using the combinatorial laplacian matrix L
     vertices_x = vertices[:, 0]
     vertices_y = vertices[:, 1]
     vertices_z = vertices[:, 2]

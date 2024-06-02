@@ -31,7 +31,6 @@ class SquaredDistanceToPlanesSolver(object):
         #       Saving the list of planes directly and iterating over them in your distance() method will work,
         #       but it won't get full points.
         self.planes = planes
-
         # Precompute matrix
         A = np.zeros((3, 3))
         b = np.zeros(3)
