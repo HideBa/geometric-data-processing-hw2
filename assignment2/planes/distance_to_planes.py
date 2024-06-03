@@ -42,6 +42,9 @@ class SquaredDistanceToPlanesSolver(object):
         self.A = A
         self.b = b
 
+        self.A2 = np.array([plane[1] for plane in planes])
+        self.b2 = np.array([np.dot(plane[0], plane[1]) for plane in planes])
+
     # !!! This function will be used for automatic grading, don't edit the signature !!!
     def sum_of_squared_distances(self, point: Vector) -> float:
         """
@@ -61,21 +64,13 @@ class SquaredDistanceToPlanesSolver(object):
         # numpy isn't strictly necessary here, but its features can make things easier.
         p = numpy.array(point)
 
-        def distance(
-            point: np.ndarray, plane: tuple[np.ndarray, np.ndarray]
-        ) -> float:
-            return np.dot(plane[0] - point, plane[1]) / np.linalg.norm(
-                plane[1]
-            )
+        Ax = np.dot(self.A2, p)
+        diff = Ax - self.b2
+        row_norms = np.linalg.norm(self.A2, axis=1)
+        squared_dist = (diff / row_norms) ** 2
+        sum_dist = np.sum(squared_dist)
 
-        sum_square_dist = 0.0
-        for plane in self.planes:
-            dist = distance(p, (np.array(plane[0]), np.array(plane[1])))
-            sum_square_dist += dist**2
-        # HINT: Consider the equation for the squared distance between a point and a plane.
-        #       Can you identify the parts which depend on the point and the parts which depend on each plane?
-
-        return sum_square_dist
+        return sum_dist
 
     # !!! This function will be used for automatic grading, don't edit the signature !!!
     def optimal_point(self) -> Vector:
